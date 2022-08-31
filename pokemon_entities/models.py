@@ -9,3 +9,7 @@ class Pokemon(models.Model):
 
 # makemigrations
 # runserver
+
+class PokemonEntity(models.Model):
+    lat = models.FloatField()
+    lon = models.FloatField()
