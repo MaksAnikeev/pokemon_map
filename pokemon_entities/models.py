@@ -1,11 +1,20 @@
 from django.db import models  # noqa F401
 
 class Pokemon(models.Model):
-    title = models.CharField('имя рус.', max_length=200)
-    title_en = models.CharField('имя англ.', max_length=200, null=True)
-    title_jp = models.CharField('имя япон.', max_length=200, null=True)
-    description = models.TextField('описание', null=True)
-    photo = models.ImageField('картинка аватар', blank=True, null=True)
+    title = models.CharField('имя рус.',
+                             max_length=200)
+    title_en = models.CharField('имя англ.',
+                                max_length=200,
+                                null=True)
+    title_jp = models.CharField('имя япон.',
+                                max_length=200,
+                                null=True,
+                                blank=True)
+    description = models.TextField('описание',
+                                   null=True,
+                                   blank=True)
+    photo = models.ImageField('картинка аватар',
+                              null=True)
     previous_evolution = models.ForeignKey('self',
                                            on_delete=models.CASCADE,
                                            blank=True,
@@ -29,7 +38,11 @@ class PokemonEntity(models.Model):
     appeared_at = models.DateTimeField('дата появления', null=True)
     disappeared_at = models.DateTimeField('дата исчезновения', null=True)
     level = models.IntegerField('уровень')
-    health = models.IntegerField('здоровье')
-    attack = models.IntegerField('атака')
-    protection = models.IntegerField('защита')
-    endurance = models.IntegerField('обучение')
+    health = models.IntegerField('здоровье',
+                                 blank=True)
+    attack = models.IntegerField('атака',
+                                 blank=True)
+    protection = models.IntegerField('защита',
+                                     blank=True)
+    endurance = models.IntegerField('обучение',
+                                    blank=True)
