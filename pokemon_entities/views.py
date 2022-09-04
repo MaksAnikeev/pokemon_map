@@ -56,22 +56,33 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    # with open('pokemon_entities/pokemons.json', encoding='utf-8') as database:
-    #     pokemons = json.load(database)['pokemons']
-    # for pokemon in pokemons:
-    #     if pokemon['pokemon_id'] == int(pokemon_id):
-    #         requested_pokemon = pokemon
-    #         break
-    # else:
-    #     return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
     pokemon_params = Pokemon.objects.get(pk=pokemon_id)
+    if pokemon_params.previous_evolution:
+        previous_evolution = {"title_ru": pokemon_params.previous_evolution.title,
+                              "pokemon_id": pokemon_params.previous_evolution.id,
+                              "img_url": request.build_absolute_uri(f'/media/{pokemon_params.previous_evolution.photo}')
+                              }
+    else:
+        previous_evolution={}
+
+    next_evolution_params = pokemon_params.next_evolution.all().first()
+    if next_evolution_params:
+        next_evolution = {"title_ru": next_evolution_params.title,
+                          "pokemon_id": next_evolution_params.id,
+                          "img_url": request.build_absolute_uri(f'/media/{next_evolution_params.photo}')
+                          }
+    else:
+        next_evolution={}
+
     pokemon = {
             'pokemon_id': pokemon_params.id,
             'title_ru': pokemon_params.title,
             'title_en': pokemon_params.title_en,
             'title_jp': pokemon_params.title_jp,
             'description': pokemon_params.description,
-            'img_url': request.build_absolute_uri(f'/media/{pokemon_params.photo}')
+            'img_url': request.build_absolute_uri(f'/media/{pokemon_params.photo}'),
+            "previous_evolution": previous_evolution,
+            "next_evolution": next_evolution
                 }
     current_time = localtime()
     entity_pokemons = PokemonEntity.objects.filter(pokemon__id = pokemon_id,
@@ -87,4 +98,3 @@ def show_pokemon(request, pokemon_id):
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon
     })
-# {'pokemon_id': 1, 'img_url': 'media\\bulbazavr_ZWjN8ek.png', 'title_ru': 'Бульбазавр'}

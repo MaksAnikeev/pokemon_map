@@ -6,6 +6,11 @@ class Pokemon(models.Model):
     title_jp = models.CharField(max_length=200, null=True)
     description = models.TextField(null=True)
     photo = models.ImageField(blank=True, null=True)
+    previous_evolution = models.ForeignKey('self',
+                                           on_delete=models.CASCADE,
+                                           blank=True,
+                                           null=True,
+                                           related_name='next_evolution')
 
     def __str__(self):
         return '{}'.format(self.title)
