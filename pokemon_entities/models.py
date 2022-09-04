@@ -1,4 +1,5 @@
-from django.db import models  # noqa F401
+from django.db import models
+
 
 class Pokemon(models.Model):
     title = models.CharField('имя рус.',
@@ -25,9 +26,6 @@ class Pokemon(models.Model):
     def __str__(self):
         return '{}'.format(self.title)
 
-# makemigrations
-# migrate
-# runserver
 
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon,

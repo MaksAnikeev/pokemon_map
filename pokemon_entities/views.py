@@ -1,12 +1,9 @@
 import folium
-import json
 import os
 
-from django.http import HttpResponseNotFound
 from django.shortcuts import render
 from pokemon_entities.models import Pokemon, PokemonEntity
 from django.utils.timezone import localtime
-from pprint import pprint
 
 MOSCOW_CENTER = [55.751244, 37.618423]
 DEFAULT_IMAGE_URL = (
@@ -33,16 +30,17 @@ def show_all_pokemons(request):
     current_time = localtime()
     entity_pokemons = PokemonEntity.objects.filter(appeared_at__lt=current_time,
                                                    disappeared_at__gt=current_time)
-    folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
+    folium_map = folium.Map(location=MOSCOW_CENTER,
+                            zoom_start=12)
     for entity_pokemon in entity_pokemons:
-            add_pokemon(folium_map,
-                        entity_pokemon.lat,
-                        entity_pokemon.lon,
-                        os.path.join('media', f'{entity_pokemon.pokemon.photo}'))
+        add_pokemon(folium_map,
+                    entity_pokemon.lat,
+                    entity_pokemon.lon,
+                    os.path.join('media', f'{entity_pokemon.pokemon.photo}'))
 
-    my_pokemons = Pokemon.objects.all()
+    pokemons = Pokemon.objects.all()
     pokemons_on_page = []
-    for pokemon in my_pokemons:
+    for pokemon in pokemons:
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
             'img_url': request.build_absolute_uri(f'/media/{pokemon.photo}'),
@@ -63,7 +61,7 @@ def show_pokemon(request, pokemon_id):
                               "img_url": request.build_absolute_uri(f'/media/{pokemon_params.previous_evolution.photo}')
                               }
     else:
-        previous_evolution={}
+        previous_evolution = {}
 
     next_evolution_params = pokemon_params.next_evolution.all().first()
     if next_evolution_params:
@@ -72,24 +70,25 @@ def show_pokemon(request, pokemon_id):
                           "img_url": request.build_absolute_uri(f'/media/{next_evolution_params.photo}')
                           }
     else:
-        next_evolution={}
+        next_evolution = {}
 
     pokemon = {
-            'pokemon_id': pokemon_params.id,
-            'title_ru': pokemon_params.title,
-            'title_en': pokemon_params.title_en,
-            'title_jp': pokemon_params.title_jp,
-            'description': pokemon_params.description,
-            'img_url': request.build_absolute_uri(f'/media/{pokemon_params.photo}'),
-            "previous_evolution": previous_evolution,
-            "next_evolution": next_evolution
-                }
+        'pokemon_id': pokemon_params.id,
+        'title_ru': pokemon_params.title,
+        'title_en': pokemon_params.title_en,
+        'title_jp': pokemon_params.title_jp,
+        'description': pokemon_params.description,
+        'img_url': request.build_absolute_uri(f'/media/{pokemon_params.photo}'),
+        "previous_evolution": previous_evolution,
+        "next_evolution": next_evolution
+    }
     current_time = localtime()
-    entity_pokemons = PokemonEntity.objects.filter(pokemon__id = pokemon_id,
+    entity_pokemons = PokemonEntity.objects.filter(pokemon__id=pokemon_id,
                                                    appeared_at__lt=current_time,
                                                    disappeared_at__gt=current_time
                                                    )
-    folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
+    folium_map = folium.Map(location=MOSCOW_CENTER,
+                            zoom_start=12)
     for entity_pokemon in entity_pokemons:
         add_pokemon(folium_map,
                     entity_pokemon.lat,
