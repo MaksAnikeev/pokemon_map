@@ -36,14 +36,14 @@ def show_all_pokemons(request):
         add_pokemon(folium_map,
                     entity_pokemon.lat,
                     entity_pokemon.lon,
-                    os.path.join('media', f'{entity_pokemon.pokemon.photo}'))
+                    request.build_absolute_uri(f'/media/{entity_pokemon.pokemon.photo}'))
 
     pokemons = Pokemon.objects.all()
     pokemons_on_page = []
     for pokemon in pokemons:
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
-            'img_url': request.build_absolute_uri(f'/media/{pokemon.photo}'),
+            'img_url': pokemon.photo.url,
             'title_ru': pokemon.title,
         })
 
@@ -58,7 +58,7 @@ def show_pokemon(request, pokemon_id):
     if pokemon_params.previous_evolution:
         previous_evolution = {"title_ru": pokemon_params.previous_evolution.title,
                               "pokemon_id": pokemon_params.previous_evolution.id,
-                              "img_url": request.build_absolute_uri(f'/media/{pokemon_params.previous_evolution.photo}')
+                              "img_url": pokemon_params.previous_evolution.photo.url
                               }
     else:
         previous_evolution = {}
@@ -67,7 +67,7 @@ def show_pokemon(request, pokemon_id):
     if next_evolution_params:
         next_evolution = {"title_ru": next_evolution_params.title,
                           "pokemon_id": next_evolution_params.id,
-                          "img_url": request.build_absolute_uri(f'/media/{next_evolution_params.photo}')
+                          "img_url": next_evolution_params.photo.url
                           }
     else:
         next_evolution = {}
@@ -78,7 +78,7 @@ def show_pokemon(request, pokemon_id):
         'title_en': pokemon_params.title_en,
         'title_jp': pokemon_params.title_jp,
         'description': pokemon_params.description,
-        'img_url': request.build_absolute_uri(f'/media/{pokemon_params.photo}'),
+        'img_url': pokemon_params.photo.url,
         "previous_evolution": previous_evolution,
         "next_evolution": next_evolution
     }
@@ -93,7 +93,7 @@ def show_pokemon(request, pokemon_id):
         add_pokemon(folium_map,
                     entity_pokemon.lat,
                     entity_pokemon.lon,
-                    os.path.join('media', f'{entity_pokemon.pokemon.photo}'))
+                    request.build_absolute_uri(f'/media/{entity_pokemon.pokemon.photo}'))
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon
     })
