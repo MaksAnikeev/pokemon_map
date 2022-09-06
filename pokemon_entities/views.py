@@ -63,7 +63,7 @@ def show_pokemon(request, pokemon_id):
     else:
         previous_evolution = {}
 
-    next_evolution_params = pokemon_params.next_evolution.all().first()
+    next_evolution_params = pokemon_params.next_evolutions.all().first()
     if next_evolution_params:
         next_evolution = {"title_ru": next_evolution_params.title,
                           "pokemon_id": next_evolution_params.id,

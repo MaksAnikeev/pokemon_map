@@ -20,7 +20,7 @@ class Pokemon(models.Model):
                                            on_delete=models.CASCADE,
                                            blank=True,
                                            null=True,
-                                           related_name='next_evolution',
+                                           related_name='next_evolutions',
                                            verbose_name='из кого эволюционировал')
 
     def __str__(self):
