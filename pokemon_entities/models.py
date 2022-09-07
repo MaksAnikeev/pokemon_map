@@ -6,13 +6,13 @@ class Pokemon(models.Model):
                              max_length=200)
     title_en = models.CharField('имя англ.',
                                 max_length=200,
-                                default="нет информации")
+                                default="")
     title_jp = models.CharField('имя япон.',
                                 max_length=200,
-                                default="нет информации",
+                                default="",
                                 blank=True)
     description = models.TextField('описание',
-                                   default="нет информации",
+                                   default="",
                                    blank=True)
     photo = models.ImageField('картинка аватар',
                               null=True)
