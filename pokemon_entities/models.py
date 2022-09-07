@@ -46,6 +46,6 @@ class PokemonEntity(models.Model):
     protection = models.IntegerField('защита',
                                      blank=True,
                                      null=True)
-    endurance = models.IntegerField('обучение',
+    endurance = models.IntegerField('выносливость',
                                     blank=True,
                                     null=True)
