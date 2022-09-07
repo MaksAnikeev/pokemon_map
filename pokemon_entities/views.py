@@ -1,7 +1,7 @@
 import folium
 import os
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from pokemon_entities.models import Pokemon, PokemonEntity
 from django.utils.timezone import localtime
 
@@ -54,7 +54,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemon_params = Pokemon.objects.get(pk=pokemon_id)
+    pokemon_params = get_object_or_404(Pokemon, pk=pokemon_id)
     if pokemon_params.previous_evolution:
         previous_evolution = {"title_ru": pokemon_params.previous_evolution.title,
                               "pokemon_id": pokemon_params.previous_evolution.id,
