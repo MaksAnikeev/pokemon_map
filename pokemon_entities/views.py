@@ -83,17 +83,17 @@ def show_pokemon(request, pokemon_id):
         "next_evolution": next_evolution
     }
     current_time = localtime()
-    entity_pokemons = PokemonEntity.objects.filter(pokemon__id=pokemon_id,
+    pokemon_entities = PokemonEntity.objects.filter(pokemon__id=pokemon_id,
                                                    appeared_at__lt=current_time,
                                                    disappeared_at__gt=current_time
                                                    )
     folium_map = folium.Map(location=MOSCOW_CENTER,
                             zoom_start=12)
-    for entity_pokemon in entity_pokemons:
+    for pokemon_entity in pokemon_entities:
         add_pokemon(folium_map,
-                    entity_pokemon.lat,
-                    entity_pokemon.lon,
-                    request.build_absolute_uri(f'/media/{entity_pokemon.pokemon.photo}'))
+                    pokemon_entity.lat,
+                    pokemon_entity.lon,
+                    request.build_absolute_uri(f'/media/{pokemon_entity.pokemon.photo}'))
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon
     })
