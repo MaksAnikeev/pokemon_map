@@ -17,7 +17,7 @@ class Pokemon(models.Model):
     photo = models.ImageField('картинка аватар',
                               null=True)
     previous_evolution = models.ForeignKey('self',
-                                           on_delete=models.CASCADE,
+                                           on_delete=models.SET_NULL,
                                            blank=True,
                                            null=True,
                                            related_name='next_evolutions',
@@ -30,6 +30,7 @@ class Pokemon(models.Model):
 class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(Pokemon,
                                 on_delete=models.CASCADE,
+                                related_name='pokemon_entities',
                                 verbose_name='имя покемона')
     lat = models.FloatField('координата широта')
     lon = models.FloatField('координата длинна')
@@ -37,10 +38,14 @@ class PokemonEntity(models.Model):
     disappeared_at = models.DateTimeField('дата исчезновения', null=True)
     level = models.IntegerField('уровень')
     health = models.IntegerField('здоровье',
-                                 blank=True)
+                                 blank=True,
+                                 null=True)
     attack = models.IntegerField('атака',
-                                 blank=True)
+                                 blank=True,
+                                 null=True)
     protection = models.IntegerField('защита',
-                                     blank=True)
+                                     blank=True,
+                                     null=True)
     endurance = models.IntegerField('обучение',
-                                    blank=True)
+                                    blank=True,
+                                    null=True)
